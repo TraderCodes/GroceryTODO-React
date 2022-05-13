@@ -6,7 +6,7 @@ function App() {
    const [name, setName] = useState('');
    const [list, setList] = useState([]);
    //  What to do when is editing
-   const [isediting, setEditing] = useState(false);
+   const [isEditing, setEditing] = useState(false);
    // checking if the person is in edit mode
    const [editID, setEditID] = useState(null);
    //  inside useState is object
@@ -16,6 +16,18 @@ function App() {
    const handleSubmit = (e) => {
       e.preventDefault();
       console.log('hello');
+      // check if name is empty or not
+      if (!name) {
+         // nme is empty display alert
+      } else if (name && isEditing) {
+         //deal while is editing
+      } else {
+         // show alert add to item + setID
+         // title:name = name that they entered in the value below
+         const newItem = { id: new Date().getTime().toString(), title: name };
+         setList([...list, newItem]);
+         setName('');
+      }
    };
    return (
       <section className="section-center">
@@ -23,7 +35,7 @@ function App() {
             {/* check alert {show} if true= diplay alert */}
             {alert.show && <Alert />}
             {/* Input section */}
-            <h3>Item List</h3>
+            <h3>Trader Codes</h3>
             <div className="form-control">
                {/* Value = {name} so when they inter it goes into useState */}
                <input
@@ -37,14 +49,17 @@ function App() {
                />
                <button type="submit" className="submit-btn">
                   {/* CHange Button Text When Is Editing */}
-                  {isediting ? 'Edit' : 'Submit'}
+                  {isEditing ? 'Edit' : 'Submit'}
                </button>
             </div>
          </form>
-         <div className="grocery-container">
-            <List />
-            <button className="clear-btn">Clear item</button>
-         </div>
+         {/* Only show container if list is not empty */}
+         {list.length > 0 && (
+            <div className="grocery-container">
+               <List items={list} />
+               <button className="clear-btn">Clear item</button>
+            </div>
+         )}
       </section>
    );
 }
