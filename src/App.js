@@ -2,9 +2,18 @@ import React, { useState, useEffect } from 'react';
 import List from './List';
 import Alert from './Alert';
 
+const getLocalStorage = () => {
+   let list = localStorage.getItem('list');
+   if (list) {
+      return JSON.parse(localStorage.getItem('list'));
+   } else {
+      return [];
+   }
+};
+
 function App() {
    const [name, setName] = useState('');
-   const [list, setList] = useState([]);
+   const [list, setList] = useState(getLocalStorage());
    //  What to do when is editing
    const [isEditing, setEditing] = useState(false);
    // checking if the person is in edit mode
@@ -65,6 +74,10 @@ function App() {
       //specificItem.title = the item they selected .title is the item inside the object, pass in setName which goes inside the input to edit the item
       setName(specificItem.title);
    };
+
+   useEffect(() => {
+      localStorage.setItem('list', JSON.stringify(list));
+   }, [list]);
 
    return (
       <section className="section-center">
