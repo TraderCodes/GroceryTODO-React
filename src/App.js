@@ -21,6 +21,18 @@ function App() {
          // name is empty display alert
          showAlert(true, 'danger', 'please enter a name');
       } else if (name && isEditing) {
+         setList(
+            list.map((item) => {
+               if (item.id === editID) {
+                  return { ...item, title: name };
+               }
+               return item;
+            })
+         );
+         setName('');
+         setEditID(null);
+         setEditing(false);
+         showAlert(true, 'success', 'item changed');
          //deal while is editing
       } else {
          // show alert add to item + setID
@@ -43,15 +55,24 @@ function App() {
    };
    const removeItem = (id) => {
       showAlert(true, 'danger', 'item removed');
-      // set the list the everything else except the ID selected
+      // return item that didn't match the currrent id
       setList(list.filter((item) => item.id !== id));
+   };
+   const editItem = (id) => {
+      const specificItem = list.find((item) => item.id === id);
+      setEditing(true);
+      setEditID(id);
+      //specificItem.title = the item they selected .title is the item inside the object, pass in setName which goes inside the input to edit the item
+      setName(specificItem.title);
    };
 
    return (
       <section className="section-center">
          <form className="grocery-form" onSubmit={handleSubmit}>
             {/* check alert {show} if true= diplay alert */}
-            {alert.show && <Alert {...alert} removeAlert={showAlert} list = {list}/>}
+            {alert.show && (
+               <Alert {...alert} removeAlert={showAlert} list={list} />
+            )}
             {/* Input section */}
             <h3>Trader Codes</h3>
             <div className="form-control">
@@ -74,7 +95,7 @@ function App() {
          {/* Only show container if list is not empty */}
          {list.length > 0 && (
             <div className="grocery-container">
-               <List items={list} removeItem={removeItem} />
+               <List items={list} removeItem={removeItem} editItem={editItem} />
                <button className="clear-btn" onClick={clearList}>
                   Clear item
                </button>
