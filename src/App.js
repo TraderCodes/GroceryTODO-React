@@ -18,7 +18,8 @@ function App() {
       console.log('hello');
       // check if name is empty or not
       if (!name) {
-         // nme is empty display alert
+         // name is empty display alert
+         showAlert(true, 'danger', 'please enter a name');
       } else if (name && isEditing) {
          //deal while is editing
       } else {
@@ -29,11 +30,14 @@ function App() {
          setName('');
       }
    };
+   const showAlert = (show = false, type = '', msg = '') => {
+      setAlert({ show, type, msg });
+   };
    return (
       <section className="section-center">
          <form className="grocery-form" onSubmit={handleSubmit}>
             {/* check alert {show} if true= diplay alert */}
-            {alert.show && <Alert />}
+            {alert.show && <Alert {...alert} removeAlert={showAlert} />}
             {/* Input section */}
             <h3>Trader Codes</h3>
             <div className="form-control">
