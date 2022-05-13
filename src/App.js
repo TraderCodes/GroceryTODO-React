@@ -24,20 +24,34 @@ function App() {
          //deal while is editing
       } else {
          // show alert add to item + setID
+         showAlert(true, 'success', 'Item added successfully');
          // title:name = name that they entered in the value below
          const newItem = { id: new Date().getTime().toString(), title: name };
          setList([...list, newItem]);
          setName('');
       }
    };
+
    const showAlert = (show = false, type = '', msg = '') => {
       setAlert({ show, type, msg });
    };
+   //  for clearing llist
+   const clearList = () => {
+      showAlert(true, 'danger', 'empty list ');
+
+      setList([]);
+   };
+   const removeItem = (id) => {
+      showAlert(true, 'danger', 'item removed');
+      // set the list the everything else except the ID selected
+      setList(list.filter((item) => item.id !== id));
+   };
+
    return (
       <section className="section-center">
          <form className="grocery-form" onSubmit={handleSubmit}>
             {/* check alert {show} if true= diplay alert */}
-            {alert.show && <Alert {...alert} removeAlert={showAlert} />}
+            {alert.show && <Alert {...alert} removeAlert={showAlert} list = {list}/>}
             {/* Input section */}
             <h3>Trader Codes</h3>
             <div className="form-control">
@@ -60,8 +74,10 @@ function App() {
          {/* Only show container if list is not empty */}
          {list.length > 0 && (
             <div className="grocery-container">
-               <List items={list} />
-               <button className="clear-btn">Clear item</button>
+               <List items={list} removeItem={removeItem} />
+               <button className="clear-btn" onClick={clearList}>
+                  Clear item
+               </button>
             </div>
          )}
       </section>
